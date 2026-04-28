@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero — Mapa del Productor 2026 · AAPAS</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
+    --teal: #1D9E75; --teal-light: #E1F5EE;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --coral: #D85A30; --coral-light: #FAECE7;
+    --blue: #185FA5; --blue-light: #E6F1FB;
+    --gray-50: #F7F7F5; --gray-100: #EEEDE8; --gray-300: #C8C7BF;
+    --gray-500: #888780; --gray-700: #444441; --gray-900: #1A1A18;
+    --radius: 8px; --radius-lg: 12px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--gray-50); color: var(--gray-900);
+    font-size: 14px; line-height: 1.6; min-height: 100vh;
+  }
+  .site-header {
+    background: #fff; border-bottom: 1px solid var(--gray-100);
+    padding: 1rem 1.5rem; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 10;
+  }
+  .site-header .logo { font-size: 13px; font-weight: 600; color: var(--purple); }
+  .site-header .subtitle { font-size: 12px; color: var(--gray-500); }
+  .badge-live {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--teal-light); color: var(--teal);
+    font-size: 11px; font-weight: 600; padding: 4px 10px;
+    border-radius: 20px; letter-spacing: .04em;
+  }
+  .badge-live::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal); animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--gray-500);
+    margin: 2rem 0 1rem; padding-bottom: .4rem;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .kpi {
+    background: #fff; border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg); padding: 1.25rem;
+  }
+  .kpi .k { font-size: 11px; color: var(--gray-500); margin-bottom: 6px; }
+  .kpi .v { font-size: 28px; font-weight: 600; color: var(--gray-900); line-height: 1; }
+  .kpi .sub { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
+  .chart-card {
+    background: #fff; border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg); padding: 1.25rem;
+  }
+  .chart-card h3 { font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; }
+  .chart-wrap { position: relative; width: 100%; height: 220px; }
+
+  .full-card {
+    background: #fff; border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem;
+  }
+  .full-card h3 { font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; font-size: 12px; color: var(--gray-500); }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--gray-500); letter-spacing: .04em; text-transform: uppercase; border-bottom: 1px solid var(--gray-100); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+  tr:last-child td { border-bottom: none; }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .pill-inicio { background: var(--purple-light); color: var(--purple-dark); }
+  .pill-trad { background: var(--gray-100); color: var(--gray-700); }
+  .pill-sat { background: var(--amber-light); color: #4A2E00; }
+  .pill-des { background: var(--coral-light); color: #4A1B0C; }
+  .pill-dig { background: var(--teal-light); color: #085041; }
+  .pill-avz { background: var(--blue-light); color: #042C53; }
+
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    height: 300px; color: var(--gray-500); font-size: 13px; flex-direction: column; gap: 8px;
+  }
+  .spinner {
+    width: 24px; height: 24px; border: 2px solid var(--gray-100);
+    border-top-color: var(--purple); border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg {
+    background: var(--coral-light); color: #4A1B0C;
+    border-radius: var(--radius); padding: 1rem 1.25rem;
+    font-size: 13px; margin-bottom: 1rem;
+  }
+
+  .refresh-btn {
+    background: none; border: 1px solid var(--gray-300); border-radius: var(--radius);
+    padding: 6px 14px; font-size: 12px; color: var(--gray-700); cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .refresh-btn:hover { background: var(--gray-50); }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 12px; color: var(--gray-700); width: 160px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; background: var(--gray-100); border-radius: 4px; height: 10px; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
+  .bar-count { font-size: 12px; color: var(--gray-500); width: 30px; text-align: right; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="logo">AAPAS</div>
+    <div class="subtitle">Comisión de Innovación y Tecnología</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="badge-live">En vivo</span>
+    <button class="refresh-btn" onclick="cargarDatos()">↺ Actualizar</button>
+  </div>
+  <div style="font-size:12px;color:var(--gray-500);text-align:right">Tablero · Mapa del<br>Productor 2026</div>
+</header>
+
+<div class="container">
+  <div id="error-container"></div>
+
+  <div class="section-label">Resumen general</div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="k">Total de respuestas</div><div class="v" id="kpi-total">—</div><div class="sub">productores relevados</div></div>
+    <div class="kpi"><div class="k">Perfil más frecuente</div><div class="v" id="kpi-perfil" style="font-size:16px;margin-top:4px">—</div><div class="sub" id="kpi-perfil-pct"></div></div>
+    <div class="kpi"><div class="k">Uso de IA</div><div class="v" id="kpi-ia">—</div><div class="sub">usan IA (habitual u ocasional)</div></div>
+    <div class="kpi"><div class="k">Última respuesta</div><div class="v" id="kpi-ultimo" style="font-size:13px;margin-top:6px">—</div><div class="sub" id="kpi-ultimo-sub"></div></div>
+  </div>
+
+  <div class="section-label">Perfiles y ramos</div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Distribución de perfiles</h3>
+      <div class="legend" id="legend-perfiles"></div>
+      <div class="chart-wrap"><canvas id="chart-perfiles" role="img" aria-label="Gráfico de torta con distribución de perfiles de productores">Cargando datos...</canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Ramos más operados</h3>
+      <div id="bars-ramos"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Desafíos y digitalización</div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Principales desafíos</h3>
+      <div id="bars-desafios"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Uso de inteligencia artificial</h3>
+      <div class="legend" id="legend-ia"></div>
+      <div class="chart-wrap"><canvas id="chart-ia" role="img" aria-label="Gráfico de adopción de inteligencia artificial">Cargando datos...</canvas></div>
+    </div>
+  </div>
+
+  <div class="section-label">Últimas respuestas</div>
+  <div class="full-card">
+    <h3>Últimos 10 registros</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Región</th>
+            <th>Antigüedad</th>
+            <th>Pólizas</th>
+            <th>Perfil</th>
+            <th>Nivel digit.</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-respuestas">
+          <tr><td colspan="6"><div class="loading"><div class="spinner"></div><span>Cargando datos...</span></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const SHEET_ID = '1ZhtBc5i7h6ZAk6BXC9ld7tM2wnjkbkIk6bnTN9c0eZc';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+const PERFIL_COLORS = {
+  'PAS en Formación':           '#EEEDFE',
+  'PAS Tradicional':            '#EEEDE8',
+  'PAS Operativo Saturado':     '#FAEEDA',
+  'PAS Comercial Desordenado':  '#FAECE7',
+  'PAS Digital en Crecimiento': '#E1F5EE',
+  'PAS Avanzado':               '#E6F1FB',
+};
+const PERFIL_BORDER = {
+  'PAS en Formación':           '#534AB7',
+  'PAS Tradicional':            '#888780',
+  'PAS Operativo Saturado':     '#BA7517',
+  'PAS Comercial Desordenado':  '#D85A30',
+  'PAS Digital en Crecimiento': '#1D9E75',
+  'PAS Avanzado':               '#185FA5',
+};
+const PERFIL_PILL = {
+  'PAS en Formación':           'pill-inicio',
+  'PAS Tradicional':            'pill-trad',
+  'PAS Operativo Saturado':     'pill-sat',
+  'PAS Comercial Desordenado':  'pill-des',
+  'PAS Digital en Crecimiento': 'pill-dig',
+  'PAS Avanzado':               'pill-avz',
+};
+
+const IA_COLORS = ['#1D9E75','#9FE1CB','#FAEEDA','#EEEDE8'];
+let chartPerfiles, chartIA;
+
+function showError(msg) {
+  document.getElementById('error-container').innerHTML =
+    `<div class="error-msg">⚠ ${msg}</div>`;
+}
+
+function clearError() {
+  document.getElementById('error-container').innerHTML = '';
+}
+
+function contarValores(arr, campo) {
+  const counts = {};
+  arr.forEach(row => {
+    const val = row[campo] || '';
+    const parts = val.split(',').map(s => s.trim()).filter(Boolean);
+    parts.forEach(p => { counts[p] = (counts[p] || 0) + 1; });
+  });
+  return counts;
+}
+
+function renderBars(containerId, counts, color) {
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 7);
+  const max = sorted[0]?.[1] || 1;
+  const container = document.getElementById(containerId);
+  container.innerHTML = sorted.map(([label, count]) => `
+    <div class="bar-row">
+      <div class="bar-label" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(count/max*100)}%;background:${color}"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>
+  `).join('');
+}
+
+async function cargarDatos() {
+  clearError();
+  try {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+    const json = JSON.parse(text.replace(/^.*?({.*}).*$/s, '$1'));
+    const cols = json.table.cols.map(c => c.label);
+    const rows = json.table.rows.map(r =>
+      Object.fromEntries(cols.map((c,i) => [c, r.c[i]?.v ?? '']))
+    ).filter(r => r['Timestamp']);
+
+    if (rows.length === 0) {
+      showError('Todavía no hay respuestas en la planilla. Completá la encuesta de prueba primero.');
+      return;
+    }
+
+    const total = rows.length;
+    document.getElementById('kpi-total').textContent = total;
+
+    const perfilesCount = contarValores(rows, 'Perfil detectado');
+    const topPerfil = Object.entries(perfilesCount).sort((a,b)=>b[1]-a[1])[0];
+    if (topPerfil) {
+      document.getElementById('kpi-perfil').textContent = topPerfil[0].replace('PAS ', '');
+      document.getElementById('kpi-perfil-pct').textContent = `${Math.round(topPerfil[1]/total*100)}% de los productores`;
+    }
+
+    const iaCount = contarValores(rows, 'Uso IA');
+    const iaUsan = (iaCount['Habitual'] || 0) + (iaCount['Ocasional'] || 0);
+    document.getElementById('kpi-ia').textContent = `${Math.round(iaUsan/total*100)}%`;
+
+    const ultimo = rows[rows.length - 1];
+    const ts = ultimo['Timestamp'];
+    document.getElementById('kpi-ultimo').textContent = ts ? String(ts).substring(0,16) : '—';
+    document.getElementById('kpi-ultimo-sub').textContent = ultimo['Región'] || '';
+
+    const perfilLabels = Object.keys(perfilesCount);
+    const perfilData = Object.values(perfilesCount);
+    const perfilBg = perfilLabels.map(p => PERFIL_COLORS[p] || '#EEEDE8');
+    const perfilBorder = perfilLabels.map(p => PERFIL_BORDER[p] || '#888780');
+
+    document.getElementById('legend-perfiles').innerHTML = perfilLabels.map((p, i) =>
+      `<span><span class="dot" style="background:${perfilBorder[i]}"></span>${p.replace('PAS ','')} (${perfilData[i]})</span>`
+    ).join('');
+
+    if (chartPerfiles) chartPerfiles.destroy();
+    chartPerfiles = new Chart(document.getElementById('chart-perfiles'), {
+      type: 'doughnut',
+      data: {
+        labels: perfilLabels,
+        datasets: [{ data: perfilData, backgroundColor: perfilBg, borderColor: perfilBorder, borderWidth: 2 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw} (${Math.round(ctx.raw/total*100)}%)`
+        }}}
+      }
+    });
+
+    const ramosCount = contarValores(rows, 'Ramos actuales');
+    renderBars('bars-ramos', ramosCount, '#534AB7');
+
+    const desafiosCount = contarValores(rows, 'Desafíos');
+    renderBars('bars-desafios', desafiosCount, '#D85A30');
+
+    const iaLabels = ['Habitual', 'Ocasional', 'La conoce, no usa', 'No usa'];
+    const iaData = iaLabels.map(l => iaCount[l] || 0);
+    const iaBg = ['#1D9E75','#9FE1CB','#FAEEDA','#EEEDE8'];
+    const iaBorder = ['#0F6E56','#1D9E75','#BA7517','#888780'];
+
+    document.getElementById('legend-ia').innerHTML = iaLabels.map((l,i) =>
+      `<span><span class="dot" style="background:${iaBorder[i]}"></span>${l} (${iaData[i]})</span>`
+    ).join('');
+
+    if (chartIA) chartIA.destroy();
+    chartIA = new Chart(document.getElementById('chart-ia'), {
+      type: 'doughnut',
+      data: {
+        labels: iaLabels,
+        datasets: [{ data: iaData, backgroundColor: iaBg, borderColor: iaBorder, borderWidth: 2 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.raw} (${Math.round(ctx.raw/total*100)}%)`
+        }}}
+      }
+    });
+
+    const ultimos = rows.slice(-10).reverse();
+    document.getElementById('tabla-respuestas').innerHTML = ultimos.map(r => {
+      const perfil = r['Perfil detectado'] || '—';
+      const pillClass = PERFIL_PILL[perfil] || 'pill-trad';
+      return `<tr>
+        <td>${String(r['Timestamp']).substring(0,16) || '—'}</td>
+        <td>${r['Región'] || '—'}</td>
+        <td>${r['Antigüedad'] || '—'}</td>
+        <td>${r['Pólizas'] || '—'}</td>
+        <td><span class="pill ${pillClass}">${perfil.replace('PAS ','')}</span></td>
+        <td>${r['Digitalización'] || '—'}</td>
+      </tr>`;
+    }).join('');
+
+  } catch(e) {
+    showError('No se pudieron cargar los datos. Verificá que la planilla de Google Sheets sea pública (compartida con "cualquier persona con el enlace").');
+    console.error(e);
+  }
+}
+
+cargarDatos();
+setInterval(cargarDatos, 60000);
+</script>
+</body>
+</html>
