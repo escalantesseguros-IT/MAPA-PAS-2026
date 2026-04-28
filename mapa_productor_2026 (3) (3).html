@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa del Productor Asesor 2026 — AAPAS</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #534AB7;
+    --purple-light: #EEEDFE;
+    --purple-dark: #3C3489;
+    --purple-mid: #7F77DD;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-dark: #085041;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --coral: #D85A30;
+    --coral-light: #FAECE7;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-dark: #042C53;
+    --gray-50: #F7F7F5;
+    --gray-100: #EEEDE8;
+    --gray-300: #C8C7BF;
+    --gray-500: #888780;
+    --gray-700: #444441;
+    --gray-900: #1A1A18;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-100);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .site-header .logo {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple);
+    letter-spacing: .03em;
+  }
+  .site-header .subtitle {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .progress-wrap {
+    width: 100%;
+    height: 3px;
+    background: var(--gray-100);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--purple-mid);
+    transition: width .35s ease;
+    width: 0%;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: .4rem;
+  }
+  .page-desc {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  /* SECTIONS */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin: 2rem 0 1rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  /* QUESTIONS */
+  .question { margin-bottom: 1.5rem; }
+  .question > .qlabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-900);
+    display: block;
+    margin-bottom: .6rem;
+  }
+  .hint { font-size: 12px; color: var(--gray-500); font-weight: 400; }
+
+  .options { display: flex; flex-direction: column; gap: 6px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--gray-700);
+    background: #fff;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--purple-mid); background: var(--purple-light); }
+  .opt.selected { border-color: var(--purple); background: var(--purple-light); color: var(--purple-dark); font-weight: 500; }
+  .opt input { width: 15px; height: 15px; accent-color: var(--purple); flex-shrink: 0; }
+
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--gray-900);
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    transition: border-color .15s;
+  }
+  textarea:focus { outline: none; border-color: var(--purple-mid); }
+
+  input[type="email"], input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--gray-900);
+    font-family: inherit;
+    transition: border-color .15s;
+  }
+  input[type="email"]:focus, input[type="text"]:focus { outline: none; border-color: var(--purple-mid); }
+
+  /* SUBMIT */
+  .btn-submit {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 14px;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    letter-spacing: .01em;
+  }
+  .btn-submit:hover { opacity: .9; }
+  .btn-submit:active { transform: scale(.99); }
+  .btn-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* RESULT */
+  #result-section { display: none; }
+
+  .perfil-banner {
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .perfil-banner .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: .35rem;
+  }
+  .perfil-banner h2 { font-size: 20px; font-weight: 600; margin-bottom: .4rem; }
+  .perfil-banner p { font-size: 13px; opacity: .85; line-height: 1.5; }
+
+  .p-inicio  { background: var(--purple-light); color: var(--purple-dark); }
+  .p-trad    { background: var(--gray-100); color: var(--gray-700); }
+  .p-sat     { background: var(--amber-light); color: #4A2E00; }
+  .p-des     { background: var(--coral-light); color: #4A1B0C; }
+  .p-dig     { background: var(--teal-light); color: var(--teal-dark); }
+  .p-avz     { background: var(--blue-light); color: var(--blue-dark); }
+
+  .kv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+  .kv {
+    background: #fff;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius);
+    padding: .75rem 1rem;
+  }
+  .kv .k { font-size: 11px; color: var(--gray-500); margin-bottom: 3px; }
+  .kv .v { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+
+  .rcard {
+    background: #fff;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: .75rem;
+  }
+  .rcard h3 { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; }
+
+  .opp-list { display: flex; flex-direction: column; gap: 10px; }
+  .opp-item { display: flex; gap: 10px; align-items: flex-start; }
+  .opp-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .opp-text { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+  .opp-text strong { color: var(--gray-900); font-weight: 600; }
+
+  .rec-list { display: flex; flex-direction: column; gap: 12px; }
+  .rec-item { display: flex; gap: 10px; align-items: flex-start; }
+  .rec-num { font-size: 12px; font-weight: 700; color: var(--purple); flex-shrink: 0; min-width: 20px; padding-top: 1px; }
+  .rec-body { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+  .rec-body strong { color: var(--gray-900); font-weight: 600; }
+
+  .cap-badge {
+    display: inline-block;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: .5rem;
+  }
+  .cap-desc { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+  .msg-final {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    border-top: 1px solid var(--gray-100);
+    padding-top: 1.25rem;
+    margin-top: .5rem;
+  }
+  .msg-final strong { color: var(--gray-700); }
+
+  .btn-volver {
+    font-size: 13px;
+    color: var(--gray-500);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 1rem;
+    text-decoration: underline;
+    display: block;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--gray-900);
+    color: #fff;
+    padding: .6rem 1.2rem;
+    border-radius: var(--radius);
+    font-size: 13px;
+    transition: transform .3s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 520px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .kv-grid { grid-template-columns: 1fr 1fr; }
+    .page-title { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="logo">AAPAS</div>
+    <div class="subtitle">Comisión de Innovación y Tecnología</div>
+  </div>
+  <div style="font-size:12px;color:var(--gray-500);text-align:right">Mapa del Productor<br>2026</div>
+  <div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+</header>
+
+<div class="container">
+
+  <!-- ═══ FORMULARIO ═══ -->
+  <div id="form-section">
+    <h1 class="page-title">Mapa del Productor Asesor 2026</h1>
+    <p class="page-desc">Este relevamiento construye un retrato real del productor asesor argentino. Completarlo lleva menos de 5 minutos. Todos los campos son anónimos salvo que dejes tu contacto al final.</p>
+
+    <!-- S1 -->
+    <div class="section-label">🧠 Sección 1 — Perfil general</div>
+
+    <div class="question">
+      <label class="qlabel">1. ¿En qué provincia o región ejercés tu actividad?</label>
+      <div class="options" data-q="region" data-type="single">
+        <label class="opt"><input type="radio" name="region" value="CABA"> Ciudad Autónoma de Buenos Aires</label>
+        <label class="opt"><input type="radio" name="region" value="Provincia de Buenos Aires"> Provincia de Buenos Aires</label>
+        <label class="opt"><input type="radio" name="region" value="Centro"> Centro (Córdoba, Santa Fe, Entre Ríos)</label>
+        <label class="opt"><input type="radio" name="region" value="Cuyo"> Cuyo (Mendoza, San Juan, San Luis)</label>
+        <label class="opt"><input type="radio" name="region" value="NOA/NEA"> NOA / NEA</label>
+        <label class="opt"><input type="radio" name="region" value="Patagonia"> Patagonia</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">2. ¿Hace cuánto trabajás en el mercado asegurador?</label>
+      <div class="options" data-q="antiguedad" data-type="single">
+        <label class="opt"><input type="radio" name="antiguedad" value="0|Menos de 1 año"> Menos de 1 año</label>
+        <label class="opt"><input type="radio" name="antiguedad" value="1|Entre 1 y 3 años"> Entre 1 y 3 años</label>
+        <label class="opt"><input type="radio" name="antiguedad" value="2|Entre 3 y 10 años"> Entre 3 y 10 años</label>
+        <label class="opt"><input type="radio" name="antiguedad" value="3|Más de 10 años"> Más de 10 años</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">3. ¿Cómo desarrollás hoy tu actividad?</label>
+      <div class="options" data-q="modalidad" data-type="single">
+        <label class="opt"><input type="radio" name="modalidad" value="independiente|PAS independiente"> PAS independiente</label>
+        <label class="opt"><input type="radio" name="modalidad" value="broker|Organización/broker"> Dentro de una organización / broker</label>
+        <label class="opt"><input type="radio" name="modalidad" value="compania|Compañía de seguros"> En una compañía de seguros</label>
+        <label class="opt"><input type="radio" name="modalidad" value="inicio|Primeros pasos"> Estoy dando mis primeros pasos</label>
+        <label class="opt"><input type="radio" name="modalidad" value="otro|Otro"> Otro</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">4. ¿Trabajás solo o con equipo?</label>
+      <div class="options" data-q="equipo" data-type="single">
+        <label class="opt"><input type="radio" name="equipo" value="solo|Solo"> Solo</label>
+        <label class="opt"><input type="radio" name="equipo" value="pequeno|1–2 colaboradores"> Tengo 1–2 colaboradores</label>
+        <label class="opt"><input type="radio" name="equipo" value="grande|Equipo 3+"> Tengo equipo de 3 o más personas</label>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div class="section-label">🎯 Sección 2 — Perfil comercial y técnico</div>
+
+    <div class="question">
+      <label class="qlabel">5. ¿En qué ramos operás actualmente? <span class="hint">(selección múltiple)</span></label>
+      <div class="grid2" data-q="ramos" data-type="multi">
+        <label class="opt"><input type="checkbox" value="Vida/Retiro"> Vida / Retiro</label>
+        <label class="opt"><input type="checkbox" value="Patrimoniales"> Patrimoniales</label>
+        <label class="opt"><input type="checkbox" value="ART"> ART</label>
+        <label class="opt"><input type="checkbox" value="RC"> Responsabilidad civil</label>
+        <label class="opt"><input type="checkbox" value="Caución"> Caución</label>
+        <label class="opt"><input type="checkbox" value="Agro"> Agro</label>
+        <label class="opt"><input type="checkbox" value="Transporte"> Transporte</label>
+        <label class="opt"><input type="checkbox" value="Reaseguros"> Reaseguros</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">6. Dentro de patrimoniales, ¿en cuáles operás? <span class="hint">(solo si aplica)</span></label>
+      <div class="grid2" data-q="patrimoniales" data-type="multi">
+        <label class="opt"><input type="checkbox" value="Vehículos"> Vehículos</label>
+        <label class="opt"><input type="checkbox" value="Hogar"> Hogar</label>
+        <label class="opt"><input type="checkbox" value="Accidentes personales"> Accidentes personales</label>
+        <label class="opt"><input type="checkbox" value="Comercio/PyME"> Comercio / PyME</label>
+        <label class="opt"><input type="checkbox" value="TRO"> Todo Riesgo Operativo</label>
+        <label class="opt"><input type="checkbox" value="Otros patrimoniales"> Otros</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">7. ¿En qué ramos te gustaría desarrollarte en los próximos 12 meses? <span class="hint">(selección múltiple)</span></label>
+      <div class="grid2" data-q="ramosDesarrollo" data-type="multi">
+        <label class="opt"><input type="checkbox" value="Vida/Retiro"> Vida / Retiro</label>
+        <label class="opt"><input type="checkbox" value="Patrimoniales"> Patrimoniales</label>
+        <label class="opt"><input type="checkbox" value="ART"> ART</label>
+        <label class="opt"><input type="checkbox" value="RC"> Responsabilidad civil</label>
+        <label class="opt"><input type="checkbox" value="Caución"> Caución</label>
+        <label class="opt"><input type="checkbox" value="Agro"> Agro</label>
+        <label class="opt"><input type="checkbox" value="Transporte"> Transporte</label>
+        <label class="opt"><input type="checkbox" value="Reaseguros"> Reaseguros</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">8. ¿Cuántas pólizas administrás aproximadamente?</label>
+      <div class="options" data-q="polizas" data-type="single">
+        <label class="opt"><input type="radio" name="polizas" value="0|Menos de 100"> Menos de 100</label>
+        <label class="opt"><input type="radio" name="polizas" value="1|100 a 300"> Entre 100 y 300</label>
+        <label class="opt"><input type="radio" name="polizas" value="2|301 a 1.000"> Entre 301 y 1.000</label>
+        <label class="opt"><input type="radio" name="polizas" value="3|Más de 1.000"> Más de 1.000</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">9. Tu cartera está compuesta principalmente por:</label>
+      <div class="options" data-q="cartera" data-type="single">
+        <label class="opt"><input type="radio" name="cartera" value="individuos|Individuos/personas"> Individuos / personas</label>
+        <label class="opt"><input type="radio" name="cartera" value="empresas|Empresas/PyMEs"> Empresas / PyMEs</label>
+        <label class="opt"><input type="radio" name="cartera" value="mixta|Mixta"> Mixta</label>
+      </div>
+    </div>
+
+    <!-- S3 -->
+    <div class="section-label">⚙️ Sección 3 — Gestión, digitalización e IA</div>
+
+    <div class="question">
+      <label class="qlabel">10. ¿Qué herramientas digitales usás actualmente? <span class="hint">(selección múltiple)</span></label>
+      <div class="grid2" data-q="herramientas" data-type="multi">
+        <label class="opt"><input type="checkbox" value="excel"> Excel / planillas</label>
+        <label class="opt"><input type="checkbox" value="crm"> CRM</label>
+        <label class="opt"><input type="checkbox" value="whatsapp"> WhatsApp Business</label>
+        <label class="opt"><input type="checkbox" value="email"> Email marketing</label>
+        <label class="opt"><input type="checkbox" value="sistema"> Sistema de gestión</label>
+        <label class="opt"><input type="checkbox" value="cotizacion"> Herr. de cotización</label>
+        <label class="opt"><input type="checkbox" value="automatizacion"> Automatizaciones</label>
+        <label class="opt"><input type="checkbox" value="ia"> Inteligencia artificial</label>
+        <label class="opt"><input type="checkbox" value="ninguna"> Ninguna / básicas</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">11. ¿Cuántas horas por semana dedicás a tareas administrativas?</label>
+      <div class="options" data-q="horasAdmin" data-type="single">
+        <label class="opt"><input type="radio" name="horasAdmin" value="0|Menos de 5h"> Menos de 5 horas</label>
+        <label class="opt"><input type="radio" name="horasAdmin" value="1|5 a 10h"> Entre 5 y 10 horas</label>
+        <label class="opt"><input type="radio" name="horasAdmin" value="2|10 a 20h"> Entre 10 y 20 horas</label>
+        <label class="opt"><input type="radio" name="horasAdmin" value="3|Más de 20h"> Más de 20 horas</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">12. ¿Usás inteligencia artificial en tu trabajo?</label>
+      <div class="options" data-q="usaIA" data-type="single">
+        <label class="opt"><input type="radio" name="usaIA" value="habitual|Habitual"> Sí, de forma habitual</label>
+        <label class="opt"><input type="radio" name="usaIA" value="ocasional|Ocasional"> Sí, de forma ocasional</label>
+        <label class="opt"><input type="radio" name="usaIA" value="conoce|La conoce, no usa"> La conozco, pero no la uso</label>
+        <label class="opt"><input type="radio" name="usaIA" value="no|No usa"> No la uso</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">13. ¿En qué áreas te gustaría incorporar más tecnología? <span class="hint">(selección múltiple)</span></label>
+      <div class="grid2" data-q="tecnologia" data-type="multi">
+        <label class="opt"><input type="checkbox" value="Captación"> Captación de clientes</label>
+        <label class="opt"><input type="checkbox" value="Seguimiento"> Seguimiento comercial</label>
+        <label class="opt"><input type="checkbox" value="Atención"> Atención al cliente</label>
+        <label class="opt"><input type="checkbox" value="Renovaciones"> Renovaciones</label>
+        <label class="opt"><input type="checkbox" value="Cobranzas"> Cobranzas</label>
+        <label class="opt"><input type="checkbox" value="Marketing"> Marketing y comunicación</label>
+        <label class="opt"><input type="checkbox" value="Análisis"> Análisis de cartera</label>
+        <label class="opt"><input type="checkbox" value="Organización"> Organización interna</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">14. ¿Cuáles son tus principales desafíos hoy? <span class="hint">(hasta 3)</span></label>
+      <div class="grid2" data-q="desafios" data-type="multi" data-max="3">
+        <label class="opt"><input type="checkbox" value="clientes|Conseguir clientes"> Conseguir nuevos clientes</label>
+        <label class="opt"><input type="checkbox" value="retencion|Retener cartera"> Retener cartera</label>
+        <label class="opt"><input type="checkbox" value="tiempo|Falta de tiempo"> Falta de tiempo</label>
+        <label class="opt"><input type="checkbox" value="procesos|Procesos lentos"> Procesos manuales/lentos</label>
+        <label class="opt"><input type="checkbox" value="organizacion|Organización interna"> Organización interna</label>
+        <label class="opt"><input type="checkbox" value="marketing|Marketing"> Comunicación y marketing</label>
+        <label class="opt"><input type="checkbox" value="digitalizacion|Adopción digital"> Adopción de herr. digitales</label>
+      </div>
+    </div>
+
+    <!-- S4 -->
+    <div class="section-label">📲 Sección 4 — Presencia digital y marketing</div>
+
+    <div class="question">
+      <label class="qlabel">15. ¿En qué redes tenés presencia activa? <span class="hint">(selección múltiple)</span></label>
+      <div class="grid2" data-q="redes" data-type="multi">
+        <label class="opt"><input type="checkbox" value="instagram"> Instagram</label>
+        <label class="opt"><input type="checkbox" value="facebook"> Facebook</label>
+        <label class="opt"><input type="checkbox" value="linkedin"> LinkedIn</label>
+        <label class="opt"><input type="checkbox" value="tiktok"> TikTok</label>
+        <label class="opt"><input type="checkbox" value="youtube"> YouTube</label>
+        <label class="opt"><input type="checkbox" value="whatsapp"> WhatsApp Business</label>
+        <label class="opt"><input type="checkbox" value="ninguna"> No uso redes sociales</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">16. ¿Contás con una estrategia de marketing definida?</label>
+      <div class="options" data-q="marketing" data-type="single">
+        <label class="opt"><input type="radio" name="marketing" value="si_constante|Sí, constante"> Sí, y la implemento constantemente</label>
+        <label class="opt"><input type="radio" name="marketing" value="si_irregular|Sí, irregular"> Sí, pero no la aplico regularmente</label>
+        <label class="opt"><input type="radio" name="marketing" value="no_quiero|No, pero quiero"> No, pero me gustaría tener una</label>
+        <label class="opt"><input type="radio" name="marketing" value="no_necesario|No lo considera necesario"> No, no lo considero necesario</label>
+      </div>
+    </div>
+
+    <!-- S5 -->
+    <div class="section-label">🚀 Sección 5 — Capacitación y crecimiento</div>
+
+    <div class="question">
+      <label class="qlabel">17. ¿En qué área querés crecer en los próximos 12 meses? <span class="hint">(hasta 3)</span></label>
+      <div class="grid2" data-q="crecimiento" data-type="multi" data-max="3">
+        <label class="opt"><input type="checkbox" value="ventas|Ventas"> Ventas y captación</label>
+        <label class="opt"><input type="checkbox" value="organizacion|Organización"> Organización comercial</label>
+        <label class="opt"><input type="checkbox" value="digitalizacion|Digitalización"> Digitalización y automatización</label>
+        <label class="opt"><input type="checkbox" value="especializacion|Especialización"> Especialización por ramo</label>
+        <label class="opt"><input type="checkbox" value="marca|Marca personal"> Marca personal</label>
+        <label class="opt"><input type="checkbox" value="ia|IA"> Uso de inteligencia artificial</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">18. ¿Qué formato de capacitación preferirías?</label>
+      <div class="options" data-q="formatoCap" data-type="single">
+        <label class="opt"><input type="radio" name="formatoCap" value="taller|Taller práctico"> Taller práctico / aplicado</label>
+        <label class="opt"><input type="radio" name="formatoCap" value="online|Curso online"> Curso online autogestionado</label>
+        <label class="opt"><input type="radio" name="formatoCap" value="webinar|Webinar"> Webinar / charla en vivo</label>
+        <label class="opt"><input type="radio" name="formatoCap" value="mentoria|Mentoría"> Mentoría o acompañamiento personalizado</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">19. ¿Cuánto estarías dispuesto a invertir en una capacitación que mejore tu negocio?</label>
+      <div class="options" data-q="inversion" data-type="single">
+        <label class="opt"><input type="radio" name="inversion" value="gratis|Solo gratuitas"> No invertiría (solo gratuitas)</label>
+        <label class="opt"><input type="radio" name="inversion" value="bajo|Hasta $10.000"> Hasta $10.000</label>
+        <label class="opt"><input type="radio" name="inversion" value="medio|$10.000–$30.000"> Entre $10.000 y $30.000</label>
+        <label class="opt"><input type="radio" name="inversion" value="alto|Más de $30.000"> Más de $30.000 si el valor es claro</label>
+      </div>
+    </div>
+
+    <!-- FINAL -->
+    <div class="section-label">💡 Sección final — Tu opinión</div>
+
+    <div class="question">
+      <label class="qlabel">20. Si pudieras automatizar una tarea administrativa mañana, ¿cuál eliminarías?</label>
+      <textarea id="tareaAuto" placeholder="Escribí tu respuesta aquí…"></textarea>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">21. ¿Querés recibir el informe con los resultados del Mapa del Productor 2026?</label>
+      <div class="options" data-q="recibirInforme" data-type="single">
+        <label class="opt"><input type="radio" name="recibirInforme" value="si|Sí"> Sí, quiero recibir los resultados</label>
+        <label class="opt"><input type="radio" name="recibirInforme" value="no|No"> No</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <label class="qlabel">22. (Opcional) Dejá tu email o WhatsApp para recibir el informe y tu diagnóstico personalizado:</label>
+      <input type="text" id="contacto" placeholder="Email o número de WhatsApp (opcional)…">
+      <p style="font-size:12px;color:var(--gray-500);margin-top:.4rem">Tu contacto solo se usará para enviarte los resultados. No se compartirá con terceros.</p>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" onclick="enviarFormulario()">Ver mi diagnóstico personalizado →</button>
+  </div>
+
+  <!-- ═══ DIAGNÓSTICO ═══ -->
+  <div id="result-section">
+    <div id="perfil-banner" class="perfil-banner">
+      <div class="tag">Perfil detectado</div>
+      <h2 id="res-nombre"></h2>
+      <p id="res-desc"></p>
+    </div>
+
+    <div class="kv-grid" id="res-kv"></div>
+
+    <div class="rcard">
+      <h3>Oportunidades detectadas</h3>
+      <div class="opp-list" id="res-opps"></div>
+    </div>
+
+    <div class="rcard">
+      <h3>Recomendaciones para los próximos 90 días</h3>
+      <div class="rec-list" id="res-recs"></div>
+    </div>
+
+    <div class="rcard">
+      <h3>Capacitación sugerida</h3>
+      <div id="res-cap"></div>
+    </div>
+
+    <p class="msg-final">
+      Hoy, crecer como productor no depende solo de vender más. Depende de organizar mejor, automatizar procesos, profesionalizar tu operación y adaptarte a un mercado que ya cambió. Tu oportunidad no está solo en vender más seguros — está en construir un negocio mejor.<br><br>
+      <strong>Comisión de Innovación y Tecnología — AAPAS · Mapa del Productor 2026</strong>
+    </p>
+
+    <button class="btn-volver" onclick="volver()">← Completar nuevamente</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════
+// CONFIGURACIÓN — COMPLETAR ANTES DE PUBLICAR
+// ════════════════════════════════════════════════
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbzQrg0L-0-EFueYN9XHgsXznJ7dBfVTO7eEm3c1X4FXLJwQr0o3VRunN7QZZ1xeuaMcAw/exec";
+// Ver instrucciones al pie del archivo
+// ════════════════════════════════════════════════
+
+// ── MATRIZ DE PERFILES ──────────────────────────
+const PERFILES = {
+  INICIO: {
+    nombre: "PAS en Formación",
+    desc: "Productor en etapa inicial: construyendo cartera, procesos y conocimientos desde cero.",
+    cls: "p-inicio", nivel: "Inicial", digit: "Baja",
+    opps: [
+      {c:"#7F77DD", t:"<strong>Construcción de cartera</strong> — Definir un nicho de inicio y primeros procesos de captación."},
+      {c:"#1D9E75", t:"<strong>Herramientas básicas</strong> — Adoptar desde el comienzo hábitos digitales que escalen."},
+      {c:"#BA7517", t:"<strong>Formación técnica</strong> — Profundizar conocimiento de producto para ganar confianza comercial."}
+    ],
+    recs: [
+      {t:"Elegí 1 o 2 ramos para especializarte", d:"Enfocarte evita dispersión y acelera el aprendizaje en la etapa inicial."},
+      {t:"Creá una planilla de seguimiento de prospectos", d:"Aunque sea en Excel: nombre, estado, próximo contacto. Es el embrión de tu CRM."},
+      {t:"Activá WhatsApp Business con perfil profesional", d:"Primera herramienta de captación y atención sin costo."},
+      {t:"Completá la capacitación básica de AAPAS", d:"El conocimiento técnico-normativo es tu diferenciador frente a canales masivos."}
+    ],
+    cap: "Formación inicial para PAS — Técnica de productos y primeras ventas",
+    capDesc: "Construir la base técnica y comercial es el paso más importante en esta etapa."
+  },
+  TRADICIONAL: {
+    nombre: "PAS Tradicional",
+    desc: "Productor con experiencia y cartera establecida, que opera con herramientas básicas y procesos mayormente manuales.",
+    cls: "p-trad", nivel: "Intermedio", digit: "Baja",
+    opps: [
+      {c:"#7F77DD", t:"<strong>Digitalización operativa</strong> — Migrar de planillas a herramientas de gestión reduciría horas administrativas."},
+      {c:"#1D9E75", t:"<strong>Renovaciones automáticas</strong> — Sistematizar avisos y seguimiento para reducir caída de cartera."},
+      {c:"#BA7517", t:"<strong>Captación activa</strong> — La cartera establecida puede ser fuente de referidos con un sistema simple."}
+    ],
+    recs: [
+      {t:"Implementá un CRM básico o sistema de gestión", d:"Centralizar cartera, vencimientos y seguimiento en un solo lugar es el primer salto de productividad."},
+      {t:"Automatizá los avisos de renovación", d:"Un recordatorio automático por WhatsApp o email puede reducir la caída de pólizas hasta un 30%."},
+      {t:"Creá un proceso de referidos", d:"Pedirle a cada cliente satisfecho un contacto es la captación de menor costo y mayor conversión."},
+      {t:"Dedicá 2 horas semanales a marketing", d:"Publicar contenido útil en Instagram o LinkedIn construye autoridad de manera sostenida."}
+    ],
+    cap: "Gestión Comercial Inteligente para PAS",
+    capDesc: "Ordenar operaciones y sistematizar seguimiento multiplica resultados sin aumentar horas de trabajo."
+  },
+  SATURADO: {
+    nombre: "PAS Operativo Saturado",
+    desc: "Productor con cartera significativa pero consumido por tareas administrativas, con poco tiempo para vender o crecer.",
+    cls: "p-sat", nivel: "Intermedio", digit: "Media",
+    opps: [
+      {c:"#BA7517", t:"<strong>Automatización urgente</strong> — Delegar procesos repetitivos es la palanca de mayor impacto inmediato."},
+      {c:"#7F77DD", t:"<strong>Delegación operativa</strong> — Con equipo o sin él, definir qué no debe hacer el productor."},
+      {c:"#1D9E75", t:"<strong>Tiempo comercial recuperado</strong> — Cada hora administrativa liberada es tiempo de venta potencial."}
+    ],
+    recs: [
+      {t:"Mapeá las 3 tareas que más tiempo te consumen", d:"Identificarlas con precisión es el paso previo a automatizarlas o delegarlas."},
+      {t:"Automatizá renovaciones, cobros y recordatorios", d:"Son las tareas más repetibles y con mayor ROI de automatización en el sector."},
+      {t:"Considerá incorporar un colaborador administrativo", d:"Incluso part-time puede liberar 10+ horas semanales de gestión operativa."},
+      {t:"Usá IA para redactar comunicaciones y reportes", d:"ChatGPT o herramientas similares pueden reducir a la mitad el tiempo de escritura profesional."}
+    ],
+    cap: "Automatización para PAS — Procesos, IA y productividad",
+    capDesc: "Recuperar tiempo es la inversión más rentable para un productor saturado operativamente."
+  },
+  DESORDENADO: {
+    nombre: "PAS Comercial Desordenado",
+    desc: "Productor con actividad comercial activa pero sin procesos claros, con dispersión en ramos, herramientas o estrategia.",
+    cls: "p-des", nivel: "Intermedio", digit: "Media",
+    opps: [
+      {c:"#D85A30", t:"<strong>Organización comercial</strong> — Definir foco de ramos y segmento de cliente aumenta el ticket promedio."},
+      {c:"#BA7517", t:"<strong>Seguimiento sistemático</strong> — La mayoría de las ventas perdidas son por falta de seguimiento, no de interés."},
+      {c:"#7F77DD", t:"<strong>Estrategia de marketing</strong> — Pasar de acciones esporádicas a un plan mensual consistente."}
+    ],
+    recs: [
+      {t:"Definí tu cliente ideal y 2 ramos principales", d:"La especialización permite comunicar con mayor precisión y cerrar más rápido."},
+      {t:"Creá un pipeline de ventas simple (5 etapas)", d:"Prospecto → Contactado → Cotizado → En cierre → Ganado. Sin esto, los negocios se pierden en el camino."},
+      {t:"Diseñá un calendario de contenido mensual", d:"4 publicaciones por semana con temas fijos (consejo, ramo, testimonio, novedad) eliminan el bloqueo creativo."},
+      {t:"Establecé KPIs mínimos semanales", d:"Contactos nuevos, cotizaciones enviadas y cierres. Lo que no se mide no mejora."}
+    ],
+    cap: "Organización y Estrategia Comercial para PAS",
+    capDesc: "Sistematizar el proceso comercial convierte actividad en resultados predecibles."
+  },
+  DIGITAL: {
+    nombre: "PAS Digital en Crecimiento",
+    desc: "Productor que ya adoptó herramientas digitales y tiene presencia online, en proceso de profesionalizar su operación.",
+    cls: "p-dig", nivel: "Avanzado", digit: "Alta",
+    opps: [
+      {c:"#1D9E75", t:"<strong>Escala con IA</strong> — Incorporar IA en análisis, comunicación y seguimiento para multiplicar capacidad operativa."},
+      {c:"#7F77DD", t:"<strong>Marketing de conversión</strong> — Pasar de presencia digital a generación real de leads calificados."},
+      {c:"#0F6E56", t:"<strong>Especialización rentable</strong> — Profundizar en ramos de mayor margen para aumentar ticket promedio."}
+    ],
+    recs: [
+      {t:"Implementá IA en tu proceso de cotización y seguimiento", d:"Herramientas de IA pueden personalizar propuestas y automatizar el nurturing de prospectos."},
+      {t:"Convertí tu contenido en captación activa", d:"Añadí CTAs claros, formularios de contacto y seguimiento automático a tus publicaciones."},
+      {t:"Medí el ROI de cada canal digital", d:"Identificar qué canal trae mejores clientes permite redirigir esfuerzo hacia lo que funciona."},
+      {t:"Desarrollá propuestas integrales por cliente", d:"Combinar ramos (ej: automotor + RC + vida) sube el ticket promedio por cliente."}
+    ],
+    cap: "Marketing Digital Avanzado e IA aplicada al PAS",
+    capDesc: "El siguiente nivel es convertir presencia digital en un sistema predecible de captación y fidelización."
+  },
+  AVANZADO: {
+    nombre: "PAS Avanzado",
+    desc: "Productor con operación estructurada, equipo, herramientas consolidadas y visión estratégica de negocio.",
+    cls: "p-avz", nivel: "Avanzado", digit: "Alta",
+    opps: [
+      {c:"#185FA5", t:"<strong>Liderazgo sectorial</strong> — Posicionarse como referente a través de contenido experto y participación en el sector."},
+      {c:"#1D9E75", t:"<strong>Escalabilidad del negocio</strong> — Sistematizar para que el negocio funcione sin depender exclusivamente del productor."},
+      {c:"#7F77DD", t:"<strong>Nuevos ramos o segmentos</strong> — Diversificar hacia ART, Agro o RC empresarial para reducir dependencia de patrimoniales."}
+    ],
+    recs: [
+      {t:"Documentá y estandarizá tus procesos clave", d:"Un manual operativo permite delegar sin pérdida de calidad y escalar con equipo."},
+      {t:"Desarrollá una estrategia de marca personal como experto", d:"Ponencias, artículos o presencia en LinkedIn te posicionan por encima de la competencia de precio."},
+      {t:"Explorá alianzas con contadores, inmobiliarias o estudios jurídicos", d:"Los canales de referidos B2B tienen el mayor LTV del sector."},
+      {t:"Analizá la viabilidad de sumar PAS junior o armar una organización", d:"El crecimiento orgánico tiene un techo; la palanca es el equipo."}
+    ],
+    cap: "Liderazgo, Escala y Estrategia para PAS Avanzado",
+    capDesc: "En este nivel, el foco pasa de operar el negocio a diseñarlo y liderarlo."
+  }
+};
+
+// ── LÓGICA DE ASIGNACIÓN ────────────────────────
+function asignarPerfil(d) {
+  const antig = parseInt(d.antiguedad ?? -1);
+  const polizas = parseInt(d.polizas ?? 0);
+  const hAdmin = parseInt(d.horasAdmin ?? 0);
+  const herr = d.herramientas || [];
+  const redes = d.redes || [];
+  const desafios = d.desafios || [];
+
+  const digitalScore = [
+    herr.includes('crm'), herr.includes('sistema'),
+    herr.includes('automatizacion'), herr.includes('ia'),
+    herr.includes('email'),
+    redes.includes('linkedin'),
+    d.usaIA === 'habitual' || d.usaIA === 'ocasional',
+    d.marketing === 'si_constante'
+  ].filter(Boolean).length;
+
+  if (antig <= 0 || d.modalidad === 'inicio') return 'INICIO';
+  if (antig >= 2 && polizas >= 2 && digitalScore >= 5) return 'AVANZADO';
+  if (digitalScore >= 3 && antig >= 1) return 'DIGITAL';
+  if (hAdmin >= 2 && polizas >= 1 && (desafios.includes('tiempo') || desafios.includes('procesos'))) return 'SATURADO';
+  if (antig >= 1 && (desafios.includes('organizacion') || desafios.includes('marketing') || desafios.includes('clientes')) && digitalScore <= 2) return 'DESORDENADO';
+  return 'TRADICIONAL';
+}
+
+// ── HELPERS ─────────────────────────────────────
+function getVal(q) {
+  const g = document.querySelector(`[data-q="${q}"]`);
+  if (!g) return null;
+  if (g.dataset.type === 'single') {
+    const c = g.querySelector('input:checked');
+    return c ? c.value.split('|')[0] : null;
+  }
+  return Array.from(g.querySelectorAll('input:checked')).map(i => i.value.split('|')[0]);
+}
+
+function getLabel(q) {
+  const g = document.querySelector(`[data-q="${q}"]`);
+  if (!g) return '';
+  if (g.dataset.type === 'single') {
+    const c = g.querySelector('input:checked');
+    if (!c) return '';
+    const parts = c.value.split('|');
+    return parts[1] || parts[0];
+  }
+  return Array.from(g.querySelectorAll('input:checked')).map(i => {
+    const p = i.value.split('|'); return p[1] || p[0];
+  }).join(', ');
+}
+
+function getData() {
+  return {
+    antiguedad: getVal('antiguedad'),
+    modalidad:  getVal('modalidad'),
+    equipo:     getVal('equipo'),
+    ramos:      getVal('ramos'),
+    polizas:    getVal('polizas'),
+    cartera:    getVal('cartera'),
+    herramientas: getVal('herramientas'),
+    horasAdmin: getVal('horasAdmin'),
+    usaIA:      getVal('usaIA'),
+    desafios:   getVal('desafios'),
+    redes:      getVal('redes'),
+    marketing:  getVal('marketing'),
+    crecimiento: getVal('crecimiento'),
+  };
+}
+
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ── INTERACCIÓN ──────────────────────────────────
+document.querySelectorAll('.opt input').forEach(inp => {
+  inp.addEventListener('change', function () {
+    const grp = this.closest('[data-q]');
+    const max = grp.dataset.max ? parseInt(grp.dataset.max) : 99;
+    if (this.type === 'radio') {
+      grp.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+      this.closest('.opt').classList.add('selected');
+    } else {
+      if (this.checked) {
+        const checked = grp.querySelectorAll('input:checked').length;
+        if (checked > max) { this.checked = false; return; }
+        this.closest('.opt').classList.add('selected');
+      } else {
+        this.closest('.opt').classList.remove('selected');
+      }
+    }
+    updateProgress();
+  });
+});
+
+function updateProgress() {
+  const qs = document.querySelectorAll('[data-q]');
+  let done = 0;
+  qs.forEach(g => { if (g.querySelector('input:checked')) done++; });
+  document.getElementById('pbar').style.width = Math.round((done / qs.length) * 100) + '%';
+}
+
+function volver() {
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('form-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── ENVÍO Y DIAGNÓSTICO ──────────────────────────
+async function enviarFormulario() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Procesando…';
+
+  const d = getData();
+  const perfil = asignarPerfil(d);
+  const p = PERFILES[perfil];
+  const contacto = document.getElementById('contacto').value.trim();
+  const tareaAuto = document.getElementById('tareaAuto').value.trim();
+  const timestamp = new Date().toLocaleString('es-AR', {timeZone:'America/Argentina/Buenos_Aires'});
+
+  // Enviar a Google Sheets
+  if (SHEETS_URL && SHEETS_URL !== "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI") {
+    try {
+      const payload = {
+        timestamp,
+        region: getLabel('region'),
+        antiguedad: getLabel('antiguedad'),
+        modalidad: getLabel('modalidad'),
+        equipo: getLabel('equipo'),
+        ramos: getLabel('ramos'),
+        patrimoniales: getLabel('patrimoniales'),
+        ramosDesarrollo: getLabel('ramosDesarrollo'),
+        polizas: getLabel('polizas'),
+        cartera: getLabel('cartera'),
+        herramientas: getLabel('herramientas'),
+        horasAdmin: getLabel('horasAdmin'),
+        usaIA: getLabel('usaIA'),
+        tecnologia: getLabel('tecnologia'),
+        desafios: getLabel('desafios'),
+        redes: getLabel('redes'),
+        marketing: getLabel('marketing'),
+        crecimiento: getLabel('crecimiento'),
+        formatoCap: getLabel('formatoCap'),
+        inversion: getLabel('inversion'),
+        tareaAuto,
+        recibirInforme: getLabel('recibirInforme'),
+        contacto,
+        perfilDetectado: p.nombre,
+        nivelDetectado: p.nivel,
+        digitalizacion: p.digit
+      };
+      await fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn('No se pudo guardar en Sheets:', e);
+    }
+  }
+
+  // Mostrar diagnóstico
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('result-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const banner = document.getElementById('perfil-banner');
+  banner.className = 'perfil-banner ' + p.cls;
+  document.getElementById('res-nombre').textContent = p.nombre;
+  document.getElementById('res-desc').textContent = p.desc;
+
+  const polLabel = ['Menos de 100','100–300','301–1.000','Más de 1.000'][parseInt(d.polizas ?? 0)] || '—';
+  const cartLabel = {individuos:'Individuos', empresas:'Empresas / PyMEs', mixta:'Mixta'}[d.cartera] || '—';
+  const iaLabel = {habitual:'Habitual', ocasional:'Ocasional', conoce:'La conoce, no usa', no:'No usa'}[d.usaIA] || '—';
+  const ramosLabel = Array.isArray(d.ramos) && d.ramos.length ? d.ramos.join(', ') : '—';
+
+  document.getElementById('res-kv').innerHTML = `
+    <div class="kv"><div class="k">Nivel</div><div class="v">${p.nivel}</div></div>
+    <div class="kv"><div class="k">Pólizas</div><div class="v">${polLabel}</div></div>
+    <div class="kv"><div class="k">Cartera</div><div class="v">${cartLabel}</div></div>
+    <div class="kv"><div class="k">Digitalización</div><div class="v">${p.digit}</div></div>
+    <div class="kv"><div class="k">Uso de IA</div><div class="v">${iaLabel}</div></div>
+    <div class="kv"><div class="k">Ramos</div><div class="v">${ramosLabel}</div></div>
+  `;
+
+  document.getElementById('res-opps').innerHTML = p.opps.map(o =>
+    `<div class="opp-item"><div class="opp-dot" style="background:${o.c}"></div><div class="opp-text">${o.t}</div></div>`
+  ).join('');
+
+  document.getElementById('res-recs').innerHTML = p.recs.map((r, i) =>
+    `<div class="rec-item"><div class="rec-num">${i + 1}.</div><div class="rec-body"><strong>${r.t}.</strong> ${r.d}</div></div>`
+  ).join('');
+
+  document.getElementById('res-cap').innerHTML =
+    `<div class="cap-badge">${p.cap}</div><p class="cap-desc">${p.capDesc}</p>`;
+
+  btn.disabled = false;
+  btn.textContent = 'Ver mi diagnóstico personalizado →';
+}
+</script>
+
+<!--
+════════════════════════════════════════════════════════════════
+INSTRUCCIONES PARA CONECTAR GOOGLE SHEETS (5 pasos)
+════════════════════════════════════════════════════════════════
+
+PASO 1 — Creá una planilla nueva en Google Sheets
+  → Nombrala "Mapa del Productor 2026"
+
+PASO 2 — Abrí el editor de Apps Script
+  → En la planilla: Extensiones > Apps Script
+
+PASO 3 — Pegá este código en el editor y guardá:
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  
+  // Agregar encabezados si la hoja está vacía
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      'Timestamp','Región','Antigüedad','Modalidad','Equipo',
+      'Ramos actuales','Patrimoniales','Ramos desarrollo',
+      'Pólizas','Cartera','Herramientas','Horas admin',
+      'Uso IA','Tecnología deseada','Desafíos','Redes','Marketing',
+      'Áreas crecimiento','Formato cap','Inversión cap',
+      'Tarea a automatizar','Recibir informe','Contacto',
+      'Perfil detectado','Nivel','Digitalización'
+    ]);
+  }
+  
+  sheet.appendRow([
+    data.timestamp, data.region, data.antiguedad, data.modalidad,
+    data.equipo, data.ramos, data.patrimoniales, data.ramosDesarrollo,
+    data.polizas, data.cartera, data.herramientas, data.horasAdmin,
+    data.usaIA, data.tecnologia, data.desafios, data.redes,
+    data.marketing, data.crecimiento, data.formatoCap, data.inversion,
+    data.tareaAuto, data.recibirInforme, data.contacto,
+    data.perfilDetectado, data.nivelDetectado, data.digitalizacion
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+PASO 4 — Publicá como aplicación web
+  → Clic en "Implementar" > "Nueva implementación"
+  → Tipo: Aplicación web
+  → Ejecutar como: Yo (tu cuenta)
+  → Quién tiene acceso: Cualquier usuario
+  → Copiá la URL que te da
+
+PASO 5 — Pegá esa URL en este archivo HTML
+  → Buscá la línea: const SHEETS_URL = "TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI";
+  → Reemplazá el texto por tu URL real
+
+────────────────────────────────────────────────────────────────
+CÓMO PUBLICAR EL ARCHIVO (opción más simple — Netlify Drop)
+────────────────────────────────────────────────────────────────
+1. Entrá a https://app.netlify.com/drop
+2. Arrastrá este archivo HTML a la zona punteada
+3. Netlify te da un link del tipo https://nombre-random.netlify.app
+4. ¡Listo! Podés compartirlo inmediatamente.
+   (Opcional: configurar dominio propio en el panel de Netlify)
+════════════════════════════════════════════════════════════════
+-->
+</body>
+</html>
